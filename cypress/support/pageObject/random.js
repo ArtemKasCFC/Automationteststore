@@ -12,14 +12,14 @@ class RandomValue {
     
         const quantity = this.getRandomInt(min, max);
     
-        if (field === "firstname" || field === "lastname" || field === "city") {
+        if (field === "name" || field === "city") {
           symbols = upperCase + lowerCase;
         } else if (field === "zipcode") {
-          symbols = upperCase + numbers + " ";
+          symbols = upperCase + numbers;
         } else if (field === "telephone" || field === "fax") {
           symbols = "123456789";
         } else if (field === "address" || field === "company") {
-          symbols = upperCase + lowerCase + numbers + ".'-#@&/ ";
+          symbols = upperCase + lowerCase + numbers + ".'-#@/ ";
         } else if (field === "login") {
           symbols = upperCase + lowerCase + numbers + ".-_";
         } else if (field === "password") {

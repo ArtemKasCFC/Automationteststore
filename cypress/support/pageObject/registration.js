@@ -41,12 +41,48 @@ class Registration {
       cy.get("#AccountFrm_agree").check();
     }
     cy.get(".col-md-2 > .btn").click();
-    if(check){
+    if(check === 'success'){
         cy.get('.maintext').then(text => {
             expect(text.text()).include('Your Account Has Been Created!')
         })
         cy.get('.menu_text').then(text => {
-            expect(text.text()).include(`Welcome back ${minFirstName}`)
+            expect(text.text()).include(`Welcome back ${firstname}`)
+        })
+    } else {
+      let name, min, max;
+      if(check === 'firstNameLength'){
+            name = 'First Name',
+            min = '1',
+            max = '32'
+      } 
+      if(check === 'lastNameLength'){
+            name = 'Last Name',
+            min = '1',
+            max = '32'
+      } 
+      if(check === 'AddressOneLength'){
+            name = 'Address 1',
+            min = '3',
+            max = '128'
+      } 
+      if(check === 'AddressTwoLength'){
+        name = 'Address ',
+        min = '3',
+        max = '128'
+      }
+      if(check === 'CityLength'){
+        name = 'City',
+        min = '3',
+        max = '128'
+      } 
+      if(check === 'ZIPLength'){
+        name = 'Zip/postal code',
+        min = '3',
+        max = '10'
+      }
+      cy.get('.has-error > .help-block').should('have.text', `${name} must be between ${min} and ${max} characters!`)
+      cy.get('.alert').then(alert => {
+          expect(alert.text()).include(`${name} must be between ${min} and ${max} characters!`)
         })
     }
   }
