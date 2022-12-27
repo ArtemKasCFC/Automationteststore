@@ -80,9 +80,19 @@ class Registration {
         min = '3',
         max = '10'
       }
-      cy.get('.has-error > .help-block').should('have.text', `${name} must be between ${min} and ${max} characters!`)
+      if(check === 'LoginLength'){
+        name = 'Login name',
+        min = '5',
+        max = '64'
+      }
+      if(check === 'PasswordLength'){
+        name = 'Password',
+        min = '4',
+        max = '20'
+      }
+      cy.get('.has-error > .help-block').should('have.text', `${name} must be ${name === 'Login name' ? 'alphanumeric only and ': ''}between ${min} and ${max} characters!`)
       cy.get('.alert').then(alert => {
-          expect(alert.text()).include(`${name} must be between ${min} and ${max} characters!`)
+          expect(alert.text()).include(`${name} must be ${name === 'Login name' ? 'alphanumeric only and ' : ''}between ${min} and ${max} characters!`)
         })
     }
   }

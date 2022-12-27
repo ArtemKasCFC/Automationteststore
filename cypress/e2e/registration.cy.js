@@ -402,6 +402,110 @@ it.skip("Registration with max+1 length in ZIP Code field ", () => {
   'ZIPLength'
 );
 });
+
+it.skip("Registration with min-1 length in Login field ", () => {
+
+  const minMinusLogin = randomValue.field(4, 4, "login")
+  
+  registration.fillInForms(
+  randomFirstName,
+  randomLastName,
+  randomEmail,
+  randomAddressOne,
+  randomAddressTwo,
+  randomCity,
+  "Belarus",
+  "Horad Minsk",
+  randomZip,
+  minMinusLogin,
+  randomPassword,
+  randomPassword,
+  randomTelephone,
+  randomFax,
+  randomCompany,
+  true,
+  true,
+  'LoginLength'
+);
+});
+
+it.skip("Registration with max+1 length in Login field ", () => {
+    
+  const maxPlusLogin = randomValue.field(65, 65, "login")
+  
+  registration.fillInForms(
+  randomFirstName,
+  randomLastName,
+  randomEmail,
+  randomAddressOne,
+  randomAddressTwo,
+  randomCity,
+  "Belarus",
+  "Horad Minsk",
+  randomZip,
+  maxPlusLogin,
+  randomPassword,
+  randomPassword,
+  randomTelephone,
+  randomFax,
+  randomCompany,
+  true,
+  true,
+  'LoginLength'
+);
+});
+
+it.skip("Registration with min-1 length in Password field ", () => {
+
+  const minMinusPassword = randomValue.field(3, 3, "password")
+  
+  registration.fillInForms(
+  randomFirstName,
+  randomLastName,
+  randomEmail,
+  randomAddressOne,
+  randomAddressTwo,
+  randomCity,
+  "Belarus",
+  "Horad Minsk",
+  randomZip,
+  randomLogin,
+  minMinusPassword,
+  minMinusPassword,
+  randomTelephone,
+  randomFax,
+  randomCompany,
+  true,
+  true,
+  'PasswordLength'
+);
+});
+
+it.skip("Registration with max+1 length in Password field ", () => {
+    
+  const maxPlusLogin = randomValue.field(21, 21, "password")
+  
+  registration.fillInForms(
+  randomFirstName,
+  randomLastName,
+  randomEmail,
+  randomAddressOne,
+  randomAddressTwo,
+  randomCity,
+  "Belarus",
+  "Horad Minsk",
+  randomZip,
+  randomLogin,
+  maxPlusLogin,
+  maxPlusLogin,
+  randomTelephone,
+  randomFax,
+  randomCompany,
+  true,
+  true,
+  'PasswordLength'
+);
+});
 });
   // name,surname 1-32 | address,city 3-128 | password 4-20 | zip 3-10 | login 5-64 | telephone 3-32
   // add tests --- min -1, max +1, requried fields...
