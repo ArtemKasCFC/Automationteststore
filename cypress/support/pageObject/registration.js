@@ -1,24 +1,23 @@
 class Registration {
-  fillInForms(
-    firstname,
-    lastname,
-    email,
-    addressOne,
-    addressTwo,
-    city,
-    country,
-    region,
-    zip,
-    login,
-    password,
-    passwordConfirm,
-    telephone,
-    fax,
-    company,
-    news,
-    privacyPolicy,
-    check
-  ) {
+  fillInForms(arr) {
+    let [firstname,
+      lastname,
+      email,
+      addressOne,
+      addressTwo,
+      city,
+      country,
+      region,
+      zip,
+      login,
+      password,
+      passwordConfirm,
+      telephone,
+      fax,
+      company,
+      news,
+      privacyPolicy,
+      check] = arr;
     cy.get("#AccountFrm_firstname").type(firstname);
     cy.get("#AccountFrm_lastname").type(lastname);
     cy.get("#AccountFrm_email").type(email);
@@ -66,7 +65,7 @@ class Registration {
             max = '128'
       } 
       if(check === 'AddressTwoLength'){
-        name = 'Address ',
+        name = 'Address 2',
         min = '3',
         max = '128'
       }
@@ -89,6 +88,11 @@ class Registration {
         name = 'Password',
         min = '4',
         max = '20'
+      }
+      if(check === 'TelephoneLength'){
+        name = 'Telephone',
+        min = '3',
+        max = '32'
       }
       cy.get('.has-error > .help-block').should('have.text', `${name} must be ${name === 'Login name' ? 'alphanumeric only and ': ''}between ${min} and ${max} characters!`)
       cy.get('.alert').then(alert => {

@@ -15,7 +15,7 @@ class RandomValue {
         if (field === "name" || field === "city") {
           symbols = upperCase + lowerCase;
         } else if (field === "zipcode") {
-          symbols = upperCase + numbers;
+          symbols = upperCase + numbers + " ";
         } else if (field === "telephone" || field === "fax") {
           symbols = "123456789";
         } else if (field === "address" || field === "company") {
@@ -42,10 +42,8 @@ class RandomValue {
           textTwo = "",
           textThree = "",
           textTotal = "",
-          symbolsOne =
-            "abcdefghijklmnopqrstuvwxyz0123456789._",
-          symbolsTwo =
-            "abcdefghijklmnopqrstuvwxyz0123456789",
+          symbolsOne = "abcdefghijklmnopqrstuvwxyz0123456789._",
+          symbolsTwo = "abcdefghijklmnopqrstuvwxyz0123456789",
           symbolsThree = "abcdefghijklmnopqrstuvwxyz";
     
         function createText(text, quantity, symbols) {
