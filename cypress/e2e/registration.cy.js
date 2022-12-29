@@ -56,9 +56,9 @@ describe("Registration", () => {
           "success"
         ];
     cy.visit("/" + "index.php?rt=account/create");
-  });
+});
 
-  it.skip("Registration with min valid values", () => {
+it.skip("Registration with min valid values", () => {
     validRandomValues[0] = randomValue.field(1, 1, "name"),
     validRandomValues[1] = randomValue.field(1, 1, "name"),
     validRandomValues[2] = randomValue.email(1, 1, 1, 1, 2, 2),                  
@@ -72,11 +72,10 @@ describe("Registration", () => {
     validRandomValues[9] = randomValue.field(5, 5, "login"),
     validRandomValues[10] = randomValue.field(4, 4, "password"),
     validRandomValues[11] = validRandomValues[10];
-    
     registration.fillInForms(validRandomValues);
-  });
+});
 
-  it.skip("Registration with max valid values", () => {
+it.skip("Registration with max valid values", () => {
     validRandomValues[0] = randomValue.field(32, 32, "name"),
     validRandomValues[1] = randomValue.field(32, 32, "name"),
     validRandomValues[2] = randomValue.email(47, 47, 31, 31, 16, 16),                  
@@ -90,17 +89,16 @@ describe("Registration", () => {
     validRandomValues[9] = randomValue.field(64, 64, "login"),
     validRandomValues[10] = randomValue.field(20, 20, "password");
     validRandomValues[11] = validRandomValues[10];
-    
-      registration.fillInForms(validRandomValues);
-  });
+    registration.fillInForms(validRandomValues);
+});
 
-  it.skip("Registration with min-1 length in First Name field ", () => {
+it.skip("Registration with min-1 length in First Name field ", () => {
       validRandomValues[0] = '{backspace}'
       validRandomValues[17] = 'firstNameLength'
       registration.fillInForms(validRandomValues);
-  });
+});
 
-  it.skip("Registration with max+1 length in First Name field ", () => {
+it.skip("Registration with max+1 length in First Name field ", () => {
     
     validRandomValues[0] = randomValue.field(33, 33, "name")
     validRandomValues[17] = 'firstNameLength'
@@ -221,20 +219,98 @@ it.skip("Registration with max+1 length in Telephone field ", () => {
   registration.fillInForms(validRandomValues);
 });
 
-it("Registration with min-1 length in Email field before '@' ", () => {
+it.skip("Registration with min-1 length in Email field before '@' ", () => {
 
-  validRandomValues[2] = randomValue.field(1, 1, 1, 62, 2, 16),
-  validRandomValues[17] = 'TelephoneLength'
+  validRandomValues[2] = randomValue.email(0, 0, 1, 62, 2, 16),
+  validRandomValues[17] = 'emailLength'
   registration.fillInForms(validRandomValues);
 });
 
 it.skip("Registration with max+1 length in Email field before '@' ", () => {
     
-  validRandomValues[2] = randomValue.field(92, 92, 1, 1, 2, 2),
-  validRandomValues[17] = 'TelephoneLength'
+  validRandomValues[2] = randomValue.email(92, 92, 1, 1, 2, 2),
+  validRandomValues[17] = 'emailLength'
   registration.fillInForms(validRandomValues);
 });
 
+it.skip("Registration with min-1 length in Email field after '@' and before last '.' ", () => {
+
+  validRandomValues[2] = randomValue.email(1, 70, 0, 0, 2, 16),
+  validRandomValues[17] = 'emailLength'
+  registration.fillInForms(validRandomValues);
 });
-  // add tests --- min -1, max +1, requried fields...
-  // min 1 1 2 maxsum 94(without '.' and '@') max 91 62 16
+
+it.skip("Registration with max+1 length in Email field after '@' and before last '.' ", () => {
+    
+  validRandomValues[2] = randomValue.email(1, 10, 63, 63, 2, 16),
+  validRandomValues[17] = 'emailLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Registration with min-1 length in Email field after last '.' ", () => {
+
+  validRandomValues[2] = randomValue.email(1, 45, 1, 45, 1, 1),
+  validRandomValues[17] = 'emailLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Registration with max+1 length in Email field after last '.' ", () => {
+    
+  validRandomValues[2] = randomValue.email(35, 35, 35, 35, 17, 17),
+  validRandomValues[17] = 'emailLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Email field is required", () => {
+    
+  validRandomValues[2] = '{backspace}',
+  validRandomValues[17] = 'emailLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Address 1 field is required", () => {
+    
+  validRandomValues[3] = '{backspace}',
+  validRandomValues[17] = 'AddressOneLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that City field is required", () => {
+    
+  validRandomValues[5] = '{backspace}',
+  validRandomValues[17] = 'CityLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Country field is required", () => {
+  validRandomValues[6] = 0,
+  validRandomValues[7] = 0,
+  validRandomValues[17] = 'CountryReq' 
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Region field is required", () => {
+  validRandomValues[7] = 0,
+  validRandomValues[17] = 'RegionReq'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that ZIPCode field is required", () => {
+  validRandomValues[8] = '{backspace}'
+  validRandomValues[17] = 'ZIPLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Login field is required", () => {
+  validRandomValues[9] = '{backspace}'
+  validRandomValues[17] = 'LoginLength'
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check that Password field is required", () => {
+  validRandomValues[10] = '{backspace}'
+  validRandomValues[11] = validRandomValues[10]
+  validRandomValues[17] = 'PasswordLength'
+  registration.fillInForms(validRandomValues);
+});
+});

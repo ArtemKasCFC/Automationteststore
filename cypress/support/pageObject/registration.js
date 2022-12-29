@@ -47,7 +47,20 @@ class Registration {
         cy.get('.menu_text').then(text => {
             expect(text.text()).include(`Welcome back ${firstname}`)
         })
-    } else {
+    } 
+    if(check === 'emailLength'){
+      cy.get('.has-error > .help-block').should('have.text', `Email Address does not appear to be valid!`)
+      cy.get('.alert').then(alert => {
+          expect(alert.text()).include(`Email Address does not appear to be valid!`)
+        })
+    }
+    if(check === 'CountryReq' || check === 'RegionReq'){
+      cy.get('.has-error > .help-block').should('have.text', `Please select a ${check === 'CountryReq'? 'country' : 'region / state'}!`)
+      cy.get('.alert').then(alert => {
+          expect(alert.text()).include(`Please select a ${check === 'CountryReq'? 'country' : 'region / state'}!`)
+        })
+    }
+    else {
       let name, min, max;
       if(check === 'firstNameLength'){
             name = 'First Name',
