@@ -313,4 +313,26 @@ it.skip("Check that Password field is required", () => {
   validRandomValues[17] = 'PasswordLength'
   registration.fillInForms(validRandomValues);
 });
+
+it.skip("Check registration without subscription to the news and that Telephone, Fax, Company, Address fields aren't required", () => {
+  validRandomValues[4] = '{backspace}'
+  validRandomValues[12] = '{backspace}'
+  validRandomValues[13] = '{backspace}'
+  validRandomValues[14] = '{backspace}'
+  validRandomValues[15] = false
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check registration without agreement with Private Policy", () => {
+ validRandomValues[16] = false
+ validRandomValues[17] = "PPReq"
+  registration.fillInForms(validRandomValues);
+});
+
+it.skip("Check registration with difference between Password and Confirm Password.", () => {
+  validRandomValues[10] = randomValue.field(4, 19, "password");
+  validRandomValues[11] =  validRandomValues[10] + 'a';
+  validRandomValues[17] = 'ConfirmPassword'
+  registration.fillInForms(validRandomValues);
+});
 });

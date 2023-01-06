@@ -1,6 +1,7 @@
 class Registration {
   fillInForms(arr) {
-    let [firstname,
+    let [
+      firstname,
       lastname,
       email,
       addressOne,
@@ -17,7 +18,10 @@ class Registration {
       company,
       news,
       privacyPolicy,
-      check] = arr;
+      check,
+    ] = arr;
+    
+    
     cy.get("#AccountFrm_firstname").type(firstname);
     cy.get("#AccountFrm_lastname").type(lastname);
     cy.get("#AccountFrm_email").type(email);
@@ -40,77 +44,109 @@ class Registration {
       cy.get("#AccountFrm_agree").check();
     }
     cy.get(".col-md-2 > .btn").click();
-    if(check === 'success'){
-        cy.get('.maintext').then(text => {
-            expect(text.text()).include('Your Account Has Been Created!')
-        })
-        cy.get('.menu_text').then(text => {
-            expect(text.text()).include(`Welcome back ${firstname}`)
-        })
+    
+    
+    if (check === "success") {
+      cy.get(".maintext").then((text) => {
+        expect(text.text()).include("Your Account Has Been Created!");
+      });
+      cy.get(".menu_text").then((text) => {
+        expect(text.text()).include(`Welcome back ${firstname}`);
+      });
+    }
+    else if (check === "emailLength") {
+      cy.get(".has-error > .help-block").should(
+        "have.text",
+        `Email Address does not appear to be valid!`
+      );
+      cy.get(".alert").then((alert) => {
+        expect(alert.text()).include(
+          `Email Address does not appear to be valid!`
+        );
+      });
+    }
+    else if (check === "CountryReq" || check === "RegionReq") {
+      cy.get(".has-error > .help-block").should(
+        "have.text",
+        `Please select a ${ check === "CountryReq" ? "country" : "region / state" }!`
+      );
+      cy.get(".alert").then((alert) => {
+        expect(alert.text()).include(
+          `Please select a ${ check === "CountryReq" ? "country" : "region / state" }!`
+        );
+      });
     } 
-    if(check === 'emailLength'){
-      cy.get('.has-error > .help-block').should('have.text', `Email Address does not appear to be valid!`)
-      cy.get('.alert').then(alert => {
-          expect(alert.text()).include(`Email Address does not appear to be valid!`)
-        })
+    else if (check === "PPReq") {
+      cy.get(".alert").then((alert) => {
+        expect(alert.text()).include(
+          `You must agree to the Privacy Policy!`
+        );
+      });
     }
-    if(check === 'CountryReq' || check === 'RegionReq'){
-      cy.get('.has-error > .help-block').should('have.text', `Please select a ${check === 'CountryReq'? 'country' : 'region / state'}!`)
-      cy.get('.alert').then(alert => {
-          expect(alert.text()).include(`Please select a ${check === 'CountryReq'? 'country' : 'region / state'}!`)
-        })
-    }
-    else {
+    else if (check === 'ConfirmPassword') {
+      cy.get(".has-error > .help-block").should(
+        "have.text",
+        `Password confirmation does not match password!`
+      );
+      cy.get(".alert").then((alert) => {
+        expect(alert.text()).include(
+          `Password confirmation does not match password!`
+        );
+      });
+    }  else {
       let name, min, max;
-      if(check === 'firstNameLength'){
-            name = 'First Name',
-            min = '1',
-            max = '32'
-      } 
-      if(check === 'lastNameLength'){
-            name = 'Last Name',
-            min = '1',
-            max = '32'
-      } 
-      if(check === 'AddressOneLength'){
-            name = 'Address 1',
-            min = '3',
-            max = '128'
-      } 
-      if(check === 'AddressTwoLength'){
-        name = 'Address 2',
-        min = '3',
-        max = '128'
+      if (check === "firstNameLength") {
+        name = "First Name",
+        min = "1",
+        max = "32";
       }
-      if(check === 'CityLength'){
-        name = 'City',
-        min = '3',
-        max = '128'
-      } 
-      if(check === 'ZIPLength'){
-        name = 'Zip/postal code',
-        min = '3',
-        max = '10'
+      if (check === "lastNameLength") {
+        name = "Last Name",
+        min = "1",
+        max = "32";
       }
-      if(check === 'LoginLength'){
-        name = 'Login name',
-        min = '5',
-        max = '64'
+      if (check === "AddressOneLength") {
+        name = "Address 1", 
+        min = "3",
+        max = "128";
       }
-      if(check === 'PasswordLength'){
-        name = 'Password',
-        min = '4',
-        max = '20'
+      if (check === "AddressTwoLength") {
+        name = "Address 2",
+        min = "3",
+        max = "128";
       }
-      if(check === 'TelephoneLength'){
-        name = 'Telephone',
-        min = '3',
-        max = '32'
+      if (check === "CityLength") {
+        name = "City",
+        min = "3",
+        max = "128";
       }
-      cy.get('.has-error > .help-block').should('have.text', `${name} must be ${name === 'Login name' ? 'alphanumeric only and ': ''}between ${min} and ${max} characters!`)
-      cy.get('.alert').then(alert => {
-          expect(alert.text()).include(`${name} must be ${name === 'Login name' ? 'alphanumeric only and ' : ''}between ${min} and ${max} characters!`)
-        })
+      if (check === "ZIPLength") {
+        name = "Zip/postal code",
+        min = "3",
+        max = "10";
+      }
+      if (check === "LoginLength") {
+        name = "Login name", 
+        min = "5", 
+        max = "64";
+      }
+      if (check === "PasswordLength") {
+        name = "Password", 
+        min = "4",
+        max = "20";
+      }
+      if (check === "TelephoneLength") {
+        name = "Telephone",
+        min = "3",
+        max = "32";
+      }
+      cy.get(".has-error > .help-block").should(
+        "have.text",
+        `${name} must be ${ name === "Login name" ? "alphanumeric only and " : "" }between ${min} and ${max} characters!`
+      );
+      cy.get(".alert").then(alert => { 
+        expect(alert.text()).include(`${name} must be ${ name === "Login name" ? "alphanumeric only and " : "" }between ${min} and ${max} characters!`);
+      });
     }
   }
 }
