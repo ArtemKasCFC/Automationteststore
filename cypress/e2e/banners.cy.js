@@ -1,52 +1,41 @@
+import Banners from "../support/pageObject/banners"
+
+
 /// <reference types="Cypress" />
 
 describe('Check banners', () => {
+
+    const banners = new Banners()
    
     beforeEach(() => {
       cy.visit('/')
     })
   
-    it.skip('Check that banners in the main page can change automatically', () => {
-        cy.get('[data-banner-id="9"]').should('be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
-        cy.wait(7000).get('[data-banner-id="10"]').should('be.visible')
-        cy.get('[data-banner-id="9"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
-        cy.wait(7000).get('[data-banner-id="17"]').should('be.visible')
-        cy.get('[data-banner-id="9"]').should('not.be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
+    it('Check that banners in the main page can change automatically', () => {
+        banners.checkBannersVisibility(9, 10, 17)
+        cy.wait(7000)
+        banners.checkBannersVisibility(10, 9, 17)
+        cy.wait(7000)
+        banners.checkBannersVisibility(17, 9, 10)
     })
 
-    it.skip('Check that banners in the main page can change by arrow button', () => {
-        cy.get('[data-banner-id="9"]').should('be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
-        cy.get('.nextArrow').click()
-        cy.get('[data-banner-id="10"]').should('be.visible')
-        cy.get('[data-banner-id="9"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
-        cy.get('.prevArrow').click()
-        cy.get('[data-banner-id="9"]').should('be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
+    it('Check that banners in the main page can change by arrow button', () => {
+        banners.checkBannersVisibility(9, 10, 17)
+        cy.get('.nextArrow').click({force: true})
+        banners.checkBannersVisibility(10, 9, 17)
+        cy.get('.prevArrow').click({force: true})
+        banners.checkBannersVisibility(9, 10, 17)
     })
 
-    it.skip('Check that banners in the main page can change by drag and drop', () => {
-        cy.get('[data-banner-id="9"]').should('be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
+    it('Check that banners in the main page can change by drag and drop', () => {
+        banners.checkBannersVisibility(9, 10, 17)
         cy.get('[data-banner-id="9"').trigger('mousedown', { which: 1})
                                      .trigger('mousemove', { which: 1, pageX: 100, pageY: 600 })
-                                     .trigger('mouseup')
-        cy.get('[data-banner-id="10"]').should('be.visible')
-        cy.get('[data-banner-id="9"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
+                                     .trigger('mouseup', {force: true})
+        banners.checkBannersVisibility(10, 9, 17)
         cy.get('[data-banner-id="10"').trigger('mousedown', { which: 1})
                                       .trigger('mousemove', { which: 1, pageX: 1100, pageY: 600 })
-                                      .trigger('mouseup')
-        cy.get('[data-banner-id="9"]').should('be.visible')
-        cy.get('[data-banner-id="10"]').should('not.be.visible')
-        cy.get('[data-banner-id="17"]').should('not.be.visible')
+                                      .trigger('mouseup', {force: true})
+        banners.checkBannersVisibility(9, 10, 17)
     })
   })
