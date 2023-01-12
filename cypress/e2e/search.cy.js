@@ -35,7 +35,7 @@ describe('Check search', () => {
         search.findItemByDescription('Notes Consist Of Mandarin')
     })
 
-    it.skip('Check finding several results and their ordering', () => {
-        search.findSeveralItems('cream')
+    it('Check finding several results and their ordering', () => {
+        search.findSeveralItems('eye')
     })
   })

@@ -22,7 +22,9 @@ class Search {
  }
 
  findSeveralItems(word){
-   let names = []
+   let names = [],
+       prices = [],
+       ratings = [];
    cy.get('#filter_keyword').type(word)
    cy.get('[title="Go"]').click()
    cy.get('#sort').select('Name A - Z')
@@ -31,19 +33,44 @@ class Search {
       expect(itemName).include(word)
       names.push(itemName)
    })
-   cy.wrap(names).then(name => {
-      expect(name).to.be.ascending
-   })
+   cy.wrap(names).should('to.be.ascending')
    cy.get('#sort').select('Name Z - A')
    cy.get('.fixed > .prdocutname').each((itemName) => {
       itemName = itemName.text().toLowerCase()
-      expect(itemName).include(word)
       names.shift()
       names.push(itemName)
    })
-   cy.wrap(names).then(name => {
-      expect(name).to.be.descending
+   cy.wrap(names).should('to.be.descending')
+   cy.get('#sort').select('Price Low > High')
+   cy.get('.grid .price > :nth-child(1)').each(itemPrice => {
+      itemPrice = +(itemPrice.text().slice(1))
+      prices.push(itemPrice)
    })
+   cy.wrap(prices).should('to.be.ascending')
+   cy.get('#sort').select('Price High > Low')
+   cy.get('.grid .price > :nth-child(1)').each(itemPrice => {
+      itemPrice = +(itemPrice.text().slice(1))
+      prices.shift()
+      prices.push(itemPrice)
+   })
+   cy.wrap(prices).should('to.be.descending')
+   cy.get('#sort').select('Rating Highest')
+   cy.get('.grid .rating').each(rating => {
+      cy.wrap(rating).invoke('attr', 'src').then(rating => {
+         rating = rating.replace(/\D/g, '')
+         ratings.push(rating)
+      })
+   })
+   cy.wrap(ratings).should('to.be.descending')
+   cy.get('#sort').select('Rating Lowest')
+   cy.get('.grid .rating').each(rating => {
+      cy.wrap(rating).invoke('attr', 'src').then(rating => {
+         rating = rating.replace(/\D/g, '')
+         ratings.shift()
+         ratings.push(rating)
+      })
+   })
+   cy.wrap(ratings).should('to.be.ascending')
  }
 }
 
