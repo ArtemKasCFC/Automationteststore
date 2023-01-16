@@ -28,14 +28,14 @@ class Search {
    cy.get('#filter_keyword').type(word)
    cy.get('[title="Go"]').click()
    cy.get('#sort').select('Name A - Z')
-   cy.get('.fixed > .prdocutname').each(itemName => {
+   cy.get('.grid .prdocutname').each(itemName => {
       itemName = itemName.text().toLowerCase()
       expect(itemName).include(word)
       names.push(itemName)
    })
    cy.wrap(names).should('to.be.ascending')
    cy.get('#sort').select('Name Z - A')
-   cy.get('.fixed > .prdocutname').each((itemName) => {
+   cy.get('.grid .prdocutname').each((itemName) => {
       itemName = itemName.text().toLowerCase()
       names.shift()
       names.push(itemName)
@@ -71,6 +71,19 @@ class Search {
       })
    })
    cy.wrap(ratings).should('to.be.ascending')
+ }
+
+findItemsByTag(tag){
+   cy.get('#filter_keyword').type(tag)
+   cy.get('[title="Go"]').click()
+   cy.get('#keyword').should('have.value', tag).then(() => {
+      cy.get('.grid .prdocutname').each((name, ind) => {
+         cy.get('.grid .prdocutname').eq(ind).click()
+         cy.get('#myTab').contains('Tags:').click()
+         cy.get('#producttag').should('have.class', 'active').and('include.text', 'fashion')
+         cy.go('back')
+      })
+   })
  }
 }
 
