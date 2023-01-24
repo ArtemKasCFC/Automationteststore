@@ -2,7 +2,10 @@ class Search {
  findItemByName(name) {
     cy.get('#filter_keyword').type(name)
     cy.get('[title="Go"]').click()
-    cy.get('.bgnone').should('include.text', name)
+    cy.get('.bgnone').then(itemName => {
+      itemName = itemName.text().toLowerCase()
+      expect(itemName).include(name.toLowerCase())
+    })
  }
 
  findItemByArticle(article) {
@@ -10,7 +13,10 @@ class Search {
     cy.get('[title="Go"]').click()
     cy.get('#model').check()
     cy.get('#search_button').click()
-    cy.get('.productinfo').should('include.text', article)
+    cy.get('.productinfo').then(itemArticle => {
+      itemArticle = itemArticle.text().toLowerCase()
+      expect(itemArticle).include(article.toLowerCase())
+    })
  }
 
  findItemByDescription(description) {

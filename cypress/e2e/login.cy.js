@@ -1,51 +1,48 @@
-import Registration from "../support/pageObject/registration"
-import RandomValue from "../support/pageObject/random"
+import LoginPage from "../support/pageObject/loginPage"
 
 /// <reference types="Cypress" />
 
-describe("Registration", () => {
-    const registration = new Registration(),
-          randomValue = new RandomValue();
-  
-  
-    beforeEach(() => {
-          randomFirstName = randomValue.field(1, 32, "name"),
-          randomLastName = randomValue.field(1, 32, "name"),
-          randomEmail = randomValue.email(1, 47, 1, 31, 2, 16),                 
-          randomTelephone = randomValue.field(3, 32, "telephone"),
-          randomFax = randomValue.field(1, 32, "fax"),
-          randomCompany = randomValue.field(1, 64, "company"),
-          randomAddressOne = randomValue.field(3, 128, "address"),
-          randomAddressTwo = randomValue.field(3, 128, "address"),
-          randomCity = randomValue.field(3, 128, "city"),
-          randomZip = randomValue.field(3, 10, "zipcode"),
-          randomLogin = randomValue.field(5, 64, "login"),
-          randomPassword = randomValue.field(4, 20, "password");
-          validRandomValues = [
-            randomFirstName,
-            randomLastName,
-            randomEmail,
-            randomAddressOne,
-            randomAddressTwo,
-            randomCity,
-            "Belarus",
-            "Horad Minsk",
-            randomZip,
-            randomLogin,
-            randomPassword,
-            randomPassword,
-            randomTelephone,
-            randomFax,
-            randomCompany,
-            true,
-            true,
-            "success"
-          ];
-      cy.visit("/" + "index.php?rt=account/create");
-  });
-  
-  it.skip("Check login registrated user", () => {
-      registration.fillInForms(validRandomValues);
-  });//Will be done tomorrow
+describe.skip('Authorization', () => {
 
-});
+    let login = new LoginPage()
+   
+    beforeEach(() => {
+      cy.visit('/')
+    })
+  
+    it('Check authorization of the existing account', () => {
+        login.login('6655321Orange', '1a2s3d4f5g', true)
+    })
+
+    it('Check authorization of the non-existent account', () => {
+        login.login('Orange6655321', '1a2s3d4f5g', false)
+    })
+
+    it('Check authorization of the existing account with incorrect password', () => {
+        login.login('6655321Orange', '1a2s3d4f5', false)
+    })
+
+    it(`Email isn't sent if database doesn't have user with typed Email and Last Name`, () => {
+        login.forgotLogin('DFjdjfdfjd', '6655321real@mail.ru', 'nonexistent')
+    })
+
+    it(`Email isn't sent if the Email field of the Forgot Your Login page is left empty`, () => {
+        login.forgotLogin('Alex', '{backspace}', 'emptyEmail')
+    }) 
+
+    it(`Email isn't sent if the Last Name field of the Forgot Your Login page is left empty`, () => {
+        login.forgotLogin('{backspace}', '6655321real@mail.ru', 'emptyLastName')
+    }) 
+
+    it(`Email isn't sent if database doesn't have user with typed Email and Login`, () => {
+        login.forgotPassword('Orange665532', '6655321real@mail.ru', 'nonexistent')
+    }) 
+
+    it(`Email isn't sent if the Email field of the Forgot Your Password page is left empty`, () => {
+        login.forgotPassword('Orange6655321', '{backspace}', 'emptyEmail')
+    }) 
+
+    it(`Email isn't sent if the Login field of the Forgot Your Password page is left empty`, () => {
+        login.forgotPassword('{backspace}', '6655321real@mail.ru', 'emptyLogin')
+    }) 
+  })

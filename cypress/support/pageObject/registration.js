@@ -1,5 +1,6 @@
 class Registration {
   fillInForms(arr) {
+    
     let [
       firstname,
       lastname,
@@ -32,7 +33,7 @@ class Registration {
     cy.get("#AccountFrm_postcode").type(zip);
     cy.get("#AccountFrm_loginname").type(login);
     cy.get("#AccountFrm_password").type(password);
-    cy.get("#AccountFrm_confirm").type(passwordConfirm); // --- Required
+    cy.get("#AccountFrm_confirm").type(passwordConfirm);
     cy.get("#AccountFrm_telephone").type(telephone);
     cy.get("#AccountFrm_fax").type(fax);
     cy.get("#AccountFrm_company").type(company);
@@ -44,9 +45,16 @@ class Registration {
       cy.get("#AccountFrm_agree").check();
     }
     cy.get(".col-md-2 > .btn").click();
+
+    
+    let emailAlert = `Email Address does not appear to be valid!`,
+        countryAlert = `Please select a country!`,
+        regionAlert = `Please select a region / state!`,
+        confirmPasswordAlert = `Password confirmation does not match password!`,
+        alertText;
     
     
-    if (check === "success") {
+    if (check === "success") {                                            
       cy.get(".maintext").then((text) => {
         expect(text.text()).include("Your Account Has Been Created!");
       });
@@ -54,46 +62,42 @@ class Registration {
         expect(text.text()).include(`Welcome back ${firstname}`);
       });
     }
-    else if (check === "emailLength") {
+    else if(check === "emailLength" || check === "CountryReq" || check === "RegionReq" || check === 'ConfirmPassword') {
+      if (check === "emailLength"){
+        alertText = emailAlert
+      }
+      else if (check === "CountryReq"){
+        alertText = countryAlert
+      }
+      else if (check === "RegionReq"){
+        alertText = regionAlert
+      } else {
+        alertText = confirmPasswordAlert
+      }
       cy.get(".has-error > .help-block").should(
         "have.text",
-        `Email Address does not appear to be valid!`
+        alertText
       );
       cy.get(".alert").then((alert) => {
         expect(alert.text()).include(
-          `Email Address does not appear to be valid!`
+          alertText
         );
       });
     }
-    else if (check === "CountryReq" || check === "RegionReq") {
-      cy.get(".has-error > .help-block").should(
-        "have.text",
-        `Please select a ${ check === "CountryReq" ? "country" : "region / state" }!`
-      );
+    else if (check === "PPReq" || check === "registeredEmail" || check === "registerdLogin") {
+      if(check === "PPReq"){
+        alertText = `You must agree to the Privacy Policy!`
+      }
+      if(check === "registeredEmail"){
+        alertText = `E-Mail Address is already registered!`
+      }
+      if(check === "registerdLogin"){
+        alertText = `This login name is not available. Try different login name!`
+      }
       cy.get(".alert").then((alert) => {
-        expect(alert.text()).include(
-          `Please select a ${ check === "CountryReq" ? "country" : "region / state" }!`
-        );
+        expect(alert.text()).include(alertText);
       });
-    } 
-    else if (check === "PPReq") {
-      cy.get(".alert").then((alert) => {
-        expect(alert.text()).include(
-          `You must agree to the Privacy Policy!`
-        );
-      });
-    }
-    else if (check === 'ConfirmPassword') {
-      cy.get(".has-error > .help-block").should(
-        "have.text",
-        `Password confirmation does not match password!`
-      );
-      cy.get(".alert").then((alert) => {
-        expect(alert.text()).include(
-          `Password confirmation does not match password!`
-        );
-      });
-    }  else {
+    } else {
       let name, min, max;
       if (check === "firstNameLength") {
         name = "First Name",

@@ -11,35 +11,43 @@ describe('Check search', () => {
       cy.visit('/')
     })
   
-    it.skip('Check search by full name', () => {
+    it('Check search by full name of the item', () => {
         search.findItemByName('Gucci Guilty')
     })
 
-    it.skip('Check search by one word', () => {
+    it('Check search by one word', () => {
         search.findItemByName('Guilty')
     })
 
-    it.skip('Check search by part of one word', () => {
+    it('Check search by part of one word', () => {
         search.findItemByName('Guil')
     })
 
-    it.skip('Check search by full article', () => {
+    it('Check that searching is register insensitive', () => {
+        search.findItemByName('GUCCI GUILTY')
+    }) 
+
+    it('Check search by full article', () => {
         search.findItemByArticle('PRF00269')
     })
 
-    it.skip('Check search by part of the article', () => {
+    it('Check search by part of the article', () => {
         search.findItemByArticle('RF00269')
     })
 
-    it.skip('Check search by description of the item', () => {
+    it('Check search by description of the item', () => {
         search.findItemByDescription('Notes Consist Of Mandarin')
     })
 
-    it.skip('Check finding several items and their ordering', () => {
+    it('Check search by the tag', () => {
+        search.findItemsByTag('fashion')
+    })
+
+    it('Check the ordering of the finding items(by alphabet, price, rating)', () => {
         search.findSeveralItems('eye')
     })
 
-    it.skip('Check finding several items by the tag', () => {
-        search.findItemsByTag('fashion')
+    it("Check that the item from different categories doesn't double", () => {
+        search.findItemByName('LANCOME HYPNOSE DOLL')
     })
   })

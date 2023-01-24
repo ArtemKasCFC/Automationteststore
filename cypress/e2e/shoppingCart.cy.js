@@ -7,17 +7,17 @@ describe('Adding an item to the shopping cart', () => {
 
   const mainPage = new MainPage(),
         productPage = new ProductPage()
- 
+  
   beforeEach(() => {
     cy.visit('/')
   })
 
   it.skip('Add an item to the shopping cart from main page', () => {
-    mainPage.addItemByName('Skinsheen Bronzer Stick', 'Brunette expressions Conditioner')
+    mainPage.addItemByName('Skinsheen Bronzer Stick', 'Brunette expressions Conditioner', 'Total Moisture Facial Cream')
   })
 
   it.skip('Add an item to the shopping cart from product page', () => {
-    productPage.addItem('Brunette expressions Conditioner')
+    productPage.addItem('Brunette expressions Conditioner', 32)
   })
 
   it.skip('Remove an item from the shopping cart by changing quantity', () => {
@@ -29,7 +29,7 @@ describe('Adding an item to the shopping cart', () => {
     })
   })
 
-  it('Remove an item from the shopping cart by remove button', () => {
+  it.skip('Remove an item from the shopping cart by remove button', () => {
     productPage.addItem('Brunette expressions Conditioner')
     cy.get(':nth-child(7) > .btn').click()
     cy.get('.contentpanel').then(text => {

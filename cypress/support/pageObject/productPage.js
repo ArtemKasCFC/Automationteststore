@@ -1,44 +1,52 @@
 class ProductPage {
-  addItem(name) {
+  addItem(name, quantity) {
     let totalQuantity = 0,
-      totalPrice = 0,
-      itemPrice = 0,
-      itemQuantity = 0,
-      itemModel;
+        totalPrice,
+        itemPrice = 0,
+        itemQuantity = 0,
+        itemModel;
     cy.get(".dropdown-toggle > .label").then((num) => {
       totalQuantity += +num.text();
     });
     cy.get(".cart_total").then((price) => {
       totalPrice = +price.text().slice(1);
     });
-    cy.get(".prdocutname").contains(name).click();
+    cy.get('#filter_keyword').type(name)
+    cy.get('[title="Go"]').click()
+    cy.url().then(url => {
+      if(url.includes('search')){
+        cy.get(".prdocutname").contains(name).eq(1).click({force: true});
+      }
+    })
+    cy.get('#product_quantity').type(`{backspace}${quantity}`)
     cy.get(".productpageprice").then((price) => {
       price = price.text().split("$");
       itemPrice += +price[1];
-      totalPrice += +price[1];
-      itemQuantity += 1;
-      totalQuantity += 1;
+      totalPrice += ((+price[1]) * quantity);
+      itemQuantity += quantity;
+      totalQuantity += quantity;
     });
     cy.get(".productinfo > :nth-child(2)").then((model) => {
       itemModel = model.text().slice(6);
-      cy.log(itemModel);
     });
     cy.get(".cart").click();
     cy.get(".dropdown-toggle > .label").then((num) => {
-      const quantity = +num.text();
-      expect(totalQuantity).eql(quantity);
+      const quantityDDL = +num.text();
+      expect(totalQuantity).eql(quantityDDL);
     });
     cy.get(".cart_total").then((price) => {
-      price = +price.text().slice(1, 5);
-      expect(totalPrice).eql(price);
+      price = +price.text().replace(/[^0-9.]/g, '');
+      expect(totalPrice.toFixed(2)).eql(price.toFixed(2));
     });
-    cy.get(".name").then((el) => {
+    if(quantity > 0){
+      cy.get(".name").then((el) => {
       expect(el.text()).include(name);
     });
     cy.get("tbody > :nth-child(2) > :nth-child(4)").then((price) => {
-      expect(+price.text().slice(1)).eql(itemPrice);
+      price = +price.text().replace(/[^0-9.]/g, '')
+      expect(price.toFixed(2)).eql(itemPrice.toFixed(2));
     });
-    cy.get("#cart_quantity72")
+    cy.get("[id^='cart_quantity']")
       .invoke("val")
       .then((value) => {
         expect(+value).eql(itemQuantity);
@@ -47,8 +55,10 @@ class ProductPage {
       expect(itemModel).include(model.text());
     });
     cy.get("tbody > :nth-child(2) > :nth-child(6)").then((total) => {
-      expect(+total.text().slice(1)).eql(itemPrice * itemQuantity);
+      total = +total.text().replace(/[^0-9.]/g, '')
+      expect(total.toFixed(2)).eql((itemPrice * itemQuantity).toFixed(2));
     });
+  }
   }
 }
 
