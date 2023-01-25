@@ -64,8 +64,30 @@ describe('Product page', () => {
         cy.get('.bgnone').should('have.text', 'Fiorella Purple Peep Toes')
     })
 
-    it('Check that the image of the product zooms in when mouse hovers over the image', () => {
+    it.skip('Check that the image of the product zooms in when mouse hovers over the image', () => {
         cy.visit('https://automationteststore.com/index.php?rt=product/product&product_id=80')
-        
+        cy.get('.easyzoom-flyout').should('not.exist')
+        cy.get('.local_image').eq(0).trigger('mouseover')
+        cy.get('.easyzoom-flyout').should('to.exist')
+    })
+
+    it.skip('Check that the image changes when user clicks on another image', () => {
+        cy.visit('https://automationteststore.com/index.php?rt=product/product&product_id=80')
+        cy.get('[src$="100016-380x380.jpg"]').should('not.exist')
+        cy.get('[src$="100014-380x380.jpg"]').should('to.exist')
+        cy.get('[src$="100016-45x45.jpg"]').click({force: true})
+        cy.get('[src$="100016-380x380.jpg"]').should('to.exist')
+        cy.get('[src$="100014-380x380.jpg"]').should('not.exist')
+    })
+
+    it.skip('Change colour of the item', () => {
+        cy.visit('https://automationteststore.com/index.php?rt=product/product&path=68_69&product_id=118')
+        cy.get('[id^="option3477"]').eq(0).should('be.checked')
+        cy.get('[id^="option3477"]').eq(2).should('not.be.checked')
+        cy.get('[id^="option3477"]').eq(2).check()
+        cy.get('[id^="option3477"]').eq(2).should('be.checked')
+        cy.get('[id^="option3477"]').eq(0).should('not.be.checked')
+        cy.get('.cart').click()
+        cy.get('.product-list').should('include.text', 'Colour green')
     })
   })
