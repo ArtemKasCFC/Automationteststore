@@ -2,6 +2,11 @@ class Search {
  findItemByName(name) {
     cy.get('#filter_keyword').type(name)
     cy.get('[title="Go"]').click()
+    cy.url().then(url => {
+      if(url.includes('search')){
+        cy.get(".prdocutname").contains(name).eq(1).click({force: true});
+      }
+    })
     cy.get('.bgnone').then(itemName => {
       itemName = itemName.text().toLowerCase()
       expect(itemName).include(name.toLowerCase())
