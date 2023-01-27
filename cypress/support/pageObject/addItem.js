@@ -1,5 +1,8 @@
+import Search from "./search";
+const searchItem = new Search()
+
 class AddItem {
-  addItem(name, quantity) {
+  addItem(name, quantity, search) {
     let totalQuantity = 0,
         totalPrice = 0,
         itemPrice = 0,
@@ -14,6 +17,9 @@ class AddItem {
       totalPrice = +price.text().slice(1);
     });
 
+    if(search){
+      searchItem.findItemByName(name)
+    }
 
     cy.url().then((url) => {
       if (url.includes("product_id")) {
@@ -54,8 +60,9 @@ class AddItem {
       expect(totalQuantity).eql(quantity);
     });
     cy.get(".cart_total").then((price) => {
+      cy.wait(1000)
       price = +price.text().replace(/[^0-9.]/g, "")
-      expect(totalPrice).eql(price);
+      expect(totalPrice.toFixed(2)).eql(price.toFixed(2));
     });
 
     
