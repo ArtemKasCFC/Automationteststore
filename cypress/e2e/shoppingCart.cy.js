@@ -1,47 +1,87 @@
-import MainPage from "../support/pageObject/mainPage"
-import ProductPage from "../support/pageObject/productPage"
 import AddItem from "../support/pageObject/addItem"
 
 /// <reference types="Cypress" />
 
 describe('Adding an item to the shopping cart', () => {
 
-  const mainPage = new MainPage(),
-        productPage = new ProductPage(),
-        addItem = new AddItem()
+  const addItem = new AddItem()
   
   beforeEach(() => {
     cy.visit('/')
   })
 
   it.skip('Add an item to the shopping cart from main page', () => {
-    mainPage.addItemByName('Skinsheen Bronzer Stick', 'Brunette expressions Conditioner', 'Total Moisture Facial Cream')
+    addItem.addItem('Skinsheen Bronzer Stick', 1)
   })
 
   it.skip('Add an item to the shopping cart from product page', () => {
-    productPage.addItem('Brunette expressions Conditioner', 1)
+    addItem.addItem('Brunette expressions Conditioner', 1, true)
   })
 
-  it("Add an item to the shopping cart from the search results page", () => {
-    // cy.get(`[href*="category&path=${/\d{2}/}"]`).contains('Men').click()
-    // cy.get('.categorymenu').contains('Makeup').siblings('.subcategories').contains('Eyes').click({force : true})
-    // cy.get('#brandcarousal [alt="Benefit"]').click()
-    cy.visit('/index.php?rt=product/product&path=58&product_id=77')
-    addItem.addItem('Men+Care Active Clean Shower Tool', 2)
+  it.skip("Add an item to the shopping cart from the search results page", () => {
+    cy.get('#filter_keyword').type('Men')
+    cy.get('[title="Go"]').click()
+    addItem.addItem('Men+Care Active Clean Shower Tool', 1)
+  })
 
-  });
+  it.skip('Add an item to the shopping cart from the brand page', () => { 
+    cy.get('#brandcarousal [alt="Benefit"]').click()
+    addItem.addItem('Product with stock locations', 1)
+  })
 
-  it.skip('Remove an item from the shopping cart by changing quantity', () => {
-    productPage.addItem('Brunette expressions Conditioner')
-    cy.get('#cart_quantity72').clear()
+  it.skip('Add an item to the shopping cart from the category page', () => { 
+  cy.get('.categorymenu > li > a').contains('Men').click()
+    addItem.addItem('Dove Men +Care Body Wash', 1)
+  })
+
+  it.skip('Add an item to the shopping cart from the subcategory page', () => { 
+    cy.get('.categorymenu > li > a').contains('Skincare').siblings('.subcategories').contains('Eyes').click({force : true})
+    addItem.addItem('Absolue Eye Precious Cells', 1) //Maybe bug
+  })
+
+  it.skip('Add an item to the shopping cart by changing quantity of the item in the shopping cart page', () => { 
+    let quantity = 2,
+        oneItemPrice = 0,
+        totalItemPrice = 0;
+    addItem.addItem('Total Moisture Facial Cream', 1)
+    cy.get("tbody > :nth-child(2) > :nth-child(4)").then((price) => {
+      oneItemPrice = +price.text().replace(/[^0-9.]/g, "");
+    })
+    cy.get("tbody > :nth-child(2) > :nth-child(6)").then((total) => {
+      totalItemPrice = +total.text().replace(/[^0-9.]/g, "");
+    });
+    cy.get("[id^='cart_quantity']").type(`{backspace}${quantity}`)
+    cy.get('#cart_update').click()
+    cy.get("tbody > :nth-child(2) > :nth-child(4)").then((price) => {
+      price = +price.text().replace(/[^0-9.]/g, "");
+      expect(price.toFixed(2)).eql(oneItemPrice.toFixed(2));
+    })
+    cy.get("tbody > :nth-child(2) > :nth-child(6)").then((total) => {
+      total = +total.text().replace(/[^0-9.]/g, "");
+      expect(total.toFixed(2)).eql((totalItemPrice * quantity).toFixed(2));
+    });
+  })
+
+  it.skip('Remove an item from the shopping cart by changing quantity of the item in the shopping cart page', () => {
+    addItem.addItem('Brunette expressions Conditioner', 1)
+    cy.get("[id^='cart_quantity']").clear()
     cy.get('#cart_update').click()
     cy.get('.contentpanel').then(text => {
       expect(text.text()).include('Your shopping cart is empty!')
     })
   })
 
-  it.skip('Remove an item from the shopping cart by remove button', () => {
-    productPage.addItem('Brunette expressions Conditioner')
+  it.skip('Remove an item from the shopping cart by typing "0" in quantity of the item in the shopping cart page', () => {
+    addItem.addItem('Brunette expressions Conditioner', 1)
+    cy.get("[id^='cart_quantity']").type(`{backspace}${0}`)
+    cy.get('#cart_update').click()
+    cy.get('.contentpanel').then(text => {
+      expect(text.text()).include('Your shopping cart is empty!')
+    })
+  })
+
+  it.skip('Remove multiple items with the same name from the shopping cart by clicking delete icon in the shopping cart page', () => {
+    addItem.addItem('Brunette expressions Conditioner', 5)
     cy.get(':nth-child(7) > .btn').click()
     cy.get('.contentpanel').then(text => {
       expect(text.text()).include('Your shopping cart is empty!')

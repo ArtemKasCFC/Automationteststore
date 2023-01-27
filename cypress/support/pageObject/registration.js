@@ -1,6 +1,5 @@
 class Registration {
   fillInForms(arr) {
-    
     let [
       firstname,
       lastname,
@@ -21,8 +20,7 @@ class Registration {
       privacyPolicy,
       check,
     ] = arr;
-    
-    
+
     cy.get("#AccountFrm_firstname").type(firstname);
     cy.get("#AccountFrm_lastname").type(lastname);
     cy.get("#AccountFrm_email").type(email);
@@ -46,53 +44,52 @@ class Registration {
     }
     cy.get(".col-md-2 > .btn").click();
 
-    
-    let emailAlert = `Email Address does not appear to be valid!`,
-        countryAlert = `Please select a country!`,
-        regionAlert = `Please select a region / state!`,
-        confirmPasswordAlert = `Password confirmation does not match password!`,
-        alertText;
-    
-    
-    if (check === "success") {                                            
+    if (check === "success") {
       cy.get(".maintext").then((text) => {
         expect(text.text()).include("Your Account Has Been Created!");
       });
       cy.get(".menu_text").then((text) => {
         expect(text.text()).include(`Welcome back ${firstname}`);
       });
-    }
-    else if(check === "emailLength" || check === "CountryReq" || check === "RegionReq" || check === 'ConfirmPassword') {
-      if (check === "emailLength"){
-        alertText = emailAlert
-      }
-      else if (check === "CountryReq"){
-        alertText = countryAlert
-      }
-      else if (check === "RegionReq"){
-        alertText = regionAlert
+    } else if (
+      check === "emailLength" ||
+      check === "CountryReq" ||
+      check === "RegionReq" ||
+      check === "ConfirmPassword"
+    ) {
+      
+      let emailAlert = `Email Address does not appear to be valid!`,
+          countryAlert = `Please select a country!`,
+          regionAlert = `Please select a region / state!`,
+          confirmPasswordAlert = `Password confirmation does not match password!`,
+          alertText;
+
+      if (check === "emailLength") {
+        alertText = emailAlert;
+      } else if (check === "CountryReq") {
+        alertText = countryAlert;
+      } else if (check === "RegionReq") {
+        alertText = regionAlert;
       } else {
-        alertText = confirmPasswordAlert
+        alertText = confirmPasswordAlert;
       }
-      cy.get(".has-error > .help-block").should(
-        "have.text",
-        alertText
-      );
+      cy.get(".has-error > .help-block").should("have.text", alertText);
       cy.get(".alert").then((alert) => {
-        expect(alert.text()).include(
-          alertText
-        );
+        expect(alert.text()).include(alertText);
       });
-    }
-    else if (check === "PPReq" || check === "registeredEmail" || check === "registerdLogin") {
-      if(check === "PPReq"){
-        alertText = `You must agree to the Privacy Policy!`
+    } else if (
+      check === "PPReq" ||
+      check === "registeredEmail" ||
+      check === "registerdLogin"
+    ) {
+      if (check === "PPReq") {
+        alertText = `You must agree to the Privacy Policy!`;
       }
-      if(check === "registeredEmail"){
-        alertText = `E-Mail Address is already registered!`
+      if (check === "registeredEmail") {
+        alertText = `E-Mail Address is already registered!`;
       }
-      if(check === "registerdLogin"){
-        alertText = `This login name is not available. Try different login name!`
+      if (check === "registerdLogin") {
+        alertText = `This login name is not available. Try different login name!`;
       }
       cy.get(".alert").then((alert) => {
         expect(alert.text()).include(alertText);
@@ -100,56 +97,40 @@ class Registration {
     } else {
       let name, min, max;
       if (check === "firstNameLength") {
-        name = "First Name",
-        min = "1",
-        max = "32";
+        (name = "First Name"), (min = "1"), (max = "32");
       }
       if (check === "lastNameLength") {
-        name = "Last Name",
-        min = "1",
-        max = "32";
+        (name = "Last Name"), (min = "1"), (max = "32");
       }
       if (check === "AddressOneLength") {
-        name = "Address 1", 
-        min = "3",
-        max = "128";
+        (name = "Address 1"), (min = "3"), (max = "128");
       }
       if (check === "AddressTwoLength") {
-        name = "Address 2",
-        min = "3",
-        max = "128";
+        (name = "Address 2"), (min = "3"), (max = "128");
       }
       if (check === "CityLength") {
-        name = "City",
-        min = "3",
-        max = "128";
+        (name = "City"), (min = "3"), (max = "128");
       }
       if (check === "ZIPLength") {
-        name = "Zip/postal code",
-        min = "3",
-        max = "10";
+        (name = "Zip/postal code"), (min = "3"), (max = "10");
       }
       if (check === "LoginLength") {
-        name = "Login name", 
-        min = "5", 
-        max = "64";
+        (name = "Login name"), (min = "5"), (max = "64");
       }
       if (check === "PasswordLength") {
-        name = "Password", 
-        min = "4",
-        max = "20";
+        (name = "Password"), (min = "4"), (max = "20");
       }
       if (check === "TelephoneLength") {
-        name = "Telephone",
-        min = "3",
-        max = "32";
+        (name = "Telephone"), (min = "3"), (max = "32");
       }
       cy.get(".has-error > .help-block").should(
         "have.text",
-        `${name} must be ${ name === "Login name" ? "alphanumeric only and " : "" }between ${min} and ${max} characters!`
+        `${name} must be ${name === "Login name" ? "alphanumeric only and " : ""}between ${min} and ${max} characters!`
       );
-      cy.get(".alert").then(alert => { 
-        expect(alert.text()).include(`${name} must be ${ name === "Login name" ? "alphanumeric only and " : "" }between ${min} and ${max} characters!`);
+      cy.get(".alert").then((alert) => {
+        expect(alert.text()).include(
+          `${name} must be ${name === "Login name" ? "alphanumeric only and " : ""}between ${min} and ${max} characters!`
+        );
       });
     }
   }

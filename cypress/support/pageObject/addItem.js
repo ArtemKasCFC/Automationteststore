@@ -13,7 +13,7 @@ class AddItem {
     cy.get(".dropdown-toggle > .label").then((quantity) => {
       totalQuantity += +quantity.text();
     });
-    cy.get(".cart_total").then((price) => {
+    cy.get('.dropdown-toggle > .cart_total').then((price) => {
       totalPrice = +price.text().slice(1);
     });
 
@@ -24,21 +24,22 @@ class AddItem {
     cy.url().then((url) => {
       if (url.includes("product_id")) {
         cy.get("#product_quantity").type(`{backspace}${quantity}`);
-        cy.get(".productpageprice").then((price) => {
+        cy.get(".productpageprice > *").first().then((price) => {
             price = +price.text().replace("$", "");
             itemPrice += price;
             totalPrice += price * quantity;
             itemQuantity += quantity;
             totalQuantity += quantity;
+            cy.log(itemPrice.toFixed(2))
         });
         cy.get(".productinfo > :nth-child(2)").then((model) => {
           itemModel = model.text().slice(6);
         });
         cy.get(".cart").click();
       } else {
-        cy.get(".grid .prdocutname").each((itemName, ind) => {
+        cy.get('.fixed > .prdocutname').each((itemName, ind) => {
           if (itemName.text().includes(name)) {
-            cy.get(".grid .pricetag").eq(ind).find(".price")
+            cy.get(".pricetag").eq(ind).find('.price > *').first()
               .then((price) => {
                 price = +price.text().replace("$", "");
                 itemPrice += price;
@@ -46,26 +47,28 @@ class AddItem {
                 itemQuantity += quantity;
                 totalQuantity += quantity;
               });
-            cy.get(".grid .pricetag").eq(ind).find(".productcart").click();
-            cy.get(".grid .pricetag").eq(ind).should("have.css", "color").and("eql", "rgb(60, 118, 61)");
+            for(let i = 0; i < quantity; ++i){
+              cy.get(".pricetag").eq(ind).find(".productcart").click();
+            }
+            cy.get(".pricetag").eq(ind).should("have.css", "color").and("eql", "rgb(60, 118, 61)");
           }
         });
         cy.get('[data-id="menu_cart"]').first().click()
       }
     });
 
-
+    cy.wait(1000)
     cy.get(".dropdown-toggle > .label").then((quantity) => {
       quantity = +quantity.text();
       expect(totalQuantity).eql(quantity);
     });
-    cy.get(".cart_total").then((price) => {
-      cy.wait(1000)
+    cy.get('.dropdown-toggle > .cart_total').then((price) => {
+      console.log(price.text().replace(/[^0-9.]/g, ""))
       price = +price.text().replace(/[^0-9.]/g, "")
       expect(totalPrice.toFixed(2)).eql(price.toFixed(2));
     });
 
-    
+  
     if (quantity > 0) {
       cy.get(".name").then((el) => {
         expect(el.text()).include(name);
