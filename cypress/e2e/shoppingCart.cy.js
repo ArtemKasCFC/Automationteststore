@@ -37,6 +37,10 @@ describe('Adding an item to the shopping cart', () => {
   it.skip('Add an item to the shopping cart from the subcategory page', () => { 
     cy.get('.categorymenu > li > a').contains('Skincare').siblings('.subcategories').contains('Eyes').click({force : true})
     addItem.addItem('Absolue Eye Precious Cells', 1) //Maybe bug
+  }) 
+
+  it.skip('Add an item to the shopping cart by changing quantity of the item in the product page', () => { 
+    addItem.addItem('Absolue Eye Precious Cells', 3, true)
   })
 
   it.skip('Add an item to the shopping cart by changing quantity of the item in the shopping cart page', () => { 
@@ -86,5 +90,24 @@ describe('Adding an item to the shopping cart', () => {
     cy.get('.contentpanel').then(text => {
       expect(text.text()).include('Your shopping cart is empty!')
     })
+  })
+
+  it.skip('Open the empty shopping cart page by clicking on the cart button in the header of the page', () => {
+    cy.get('[data-id="menu_cart"]').first().click()
+    cy.url().should('include', 'cart')
+    cy.get('.maintext').should('include.text', 'Shopping Cart')
+  })
+  
+   it.skip('Open the shopping cart page by clicking on the Shopping Cart DDL', () => { 
+    cy.get('.dropdown-toggle > .fa').click()
+    cy.url().should('include', 'cart')
+    cy.get('.maintext').should('include.text', 'Shopping Cart')
+  })
+  
+   it.skip('Open the shopping cart page by clicking on the cart button in the Shopping Cart DDL', () => { 
+    cy.get('.dropdown-toggle > .fa').trigger('mouseover')
+    cy.get('[title="View Cart"]').should('be.visible').click()
+    cy.url().should('include', 'cart')
+    cy.get('.maintext').should('include.text', 'Shopping Cart')
   })
 })
